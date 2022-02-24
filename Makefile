@@ -1,3 +1,5 @@
+# Builds VexRiscv (master) against local SpinalHDL 1.6.4 (master)
+
 .ONESHELL:
 
 .PHONY: all local_spinal
@@ -25,7 +27,8 @@ try/VexRiscv:
 	set -e
 	mkdir -p try
 	cd try/
-	git clone --recurse https://github.com/SpinalHDL/VexRiscv.git
+	git clone --branch=master --recurse https://github.com/SpinalHDL/VexRiscv.git
+	sed -i 's@val spinalVersion.*=.*@val spinalVersion = "1.6.4"@' VexRiscv/build.sbt # SpinalHDL version
 	cd ..
 
 try/SpinalHDL: try/VexRiscv
@@ -34,8 +37,10 @@ try/SpinalHDL: try/VexRiscv
 	cd try/
 	git clone --recurse https://github.com/SpinalHDL/SpinalHDL.git
 	cd SpinalHDL
-	git checkout v1.6.4
-	cp -av ../VexRiscv/project/build.properties project/
+	git checkout v1.6.4 # SpinalHDL version
+
+	# do we need same sbt version?
+	#cp -av ../VexRiscv/project/build.properties project/
 	cd ..
 
 clean:
